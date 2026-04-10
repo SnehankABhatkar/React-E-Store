@@ -1,24 +1,22 @@
 using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")] //https://localhost:5001/api/prodcuts
-public class ProductsController(StoreContext context) : ControllerBase
+public class ProductsController(StoreContext context) : BaseApiController
 {
     [HttpGet]
-    public ActionResult<List<Product>> GetProducts()
+    public async Task<ActionResult<List<Product>>> GetProducts()
     {
-        return context.Products.ToList();
+        return await context.Products.ToListAsync();
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Product> GetProduct(int id)
+    public async Task<ActionResult<Product>> GetProduct(int id)
     {
-        var product = context.Products.Find(id);
+        var product = await context.Products.FindAsync(id);
 
         if (product == null) return NotFound();
 
