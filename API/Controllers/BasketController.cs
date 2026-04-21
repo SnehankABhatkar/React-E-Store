@@ -14,7 +14,7 @@ public class BasketController(StoreContext context
     [HttpGet]
     public async Task<ActionResult<BasketDto>> GetBasket()
     {
-        var basket = await RetrieveBasket();
+        var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]);
 
         if (basket == null) return NoContent();
 
@@ -24,7 +24,7 @@ public class BasketController(StoreContext context
     [HttpPost]
     public async Task<ActionResult<BasketDto>> AddItemToBasket(int productId, int quantity)
     {
-        var basket = await RetrieveBasket();
+        var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]); ;
 
         basket ??= CreateBasket();
 
@@ -44,7 +44,8 @@ public class BasketController(StoreContext context
     public async Task<ActionResult> RemoveBasketItem(int productId, int quantity)
     {
         //get basket
-        var basket = await RetrieveBasket();
+        //var basket = await RetrieveBasket(); For reference
+        var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]);
 
         //remove the item or reduce its quantity
         if (basket == null) return BadRequest("Unable to retrieve basket.");
@@ -62,14 +63,6 @@ public class BasketController(StoreContext context
         return BadRequest();
     }
 
-    private async Task<Basket?> RetrieveBasket()
-    {
-        return await context.Baskets
-        .Include(x => x.Items)
-        .ThenInclude(x => x.Product)
-        .FirstOrDefaultAsync(x => x.BasketId == Request.Cookies["basketId"]);
-    }
-
     private Basket CreateBasket()
     {
         var basketId = Guid.NewGuid().ToString();
@@ -85,6 +78,13 @@ public class BasketController(StoreContext context
         context.Baskets.Add(basket);
         return basket;
     }
-
+    //For reference
+    private async Task<Basket?> RetrieveBasket()
+    {
+        return await context.Baskets
+        .Include(x => x.Items)
+        .ThenInclude(x => x.Product)
+        .FirstOrDefaultAsync(x => x.BasketId == Request.Cookies["basketId"]);
+    }
 
 }

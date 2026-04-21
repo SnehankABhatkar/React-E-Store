@@ -5,10 +5,13 @@ function RequireAuth() {
   const { data: user, isLoading } = useUserInfoQuery();
   const loaction = useLocation();
 
+  console.log(user);
+  console.log(!user);
+
   if (isLoading) return <div>Loading...</div>;
 
   if (!user) {
-    <Navigate to="/login" state={{ from: loaction }} />;
+    return <Navigate to="/login" state={{ from: loaction }} />;
   }
 
   return <Outlet />;

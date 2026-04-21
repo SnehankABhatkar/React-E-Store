@@ -1,6 +1,7 @@
 using System;
 using API.DTOs;
 using API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
 
@@ -11,6 +12,8 @@ public static class BasketExtensions
         return new BasketDto
         {
             BasketId = basket.BasketId,
+            ClientSecret = basket.ClientSecret,
+            PaymentIntentId = basket.PaymentIntentId,
             Items = basket.Items.Select(x => new BasketItemDto
             {
                 ProductId = x.ProductId,
@@ -23,5 +26,14 @@ public static class BasketExtensions
 
             }).ToList()
         };
+    }
+
+    public static async Task<Basket> GetBasketWithItems(this IQueryable<Basket> query, string? basketId)
+    {
+        var basket = await query
+        .Include(x => x.Items)
+        .ThenInclude(x => x.Product)
+        .FirstOrDefaultAsync(x => x.BasketId == basketId);
+        return basket!;
     }
 }
