@@ -29,7 +29,7 @@ function LoginForm() {
 
   const onSubmit = async (data: LoginSchema) => {
     await login(data);
-    await fetchUserInfo;
+    await fetchUserInfo();
     navigate(location.state?.from || "/catalog");
   };
   return (
