@@ -1,14 +1,18 @@
 import { z } from "zod";
 
+// const fileSchema = z
+//   .instanceof(File)
+//   .refine((file) => file.size > 0, {
+//     message: "A file must be uploaded",
+//   })
+//   .transform((file) => ({
+//     ...file,
+//     preview: URL.createObjectURL(file),
+//   }));
+
 const fileSchema = z
-  .instanceof(File)
-  .refine((file) => file.size > 0, {
-    message: "A file must be uploaded",
-  })
-  .transform((file) => ({
-    ...file,
-    preview: URL.createObjectURL(file),
-  }));
+  .custom<File & { preview?: string }>()
+  .refine((file) => file instanceof File, "Expected a valid file");
 
 export const createProductSchema = z
   .object({
@@ -28,12 +32,15 @@ export const createProductSchema = z
       .min(10, {
         message: "Description must be at least 10 characters",
       }),
-    price: z.coerce
-      .number<number>({
-        error: (issue) =>
-          issue.input === undefined ? "Price is required" : "Invalid number",
-      })
-      .min(100, "Price must be at least $1.00"),
+    // price: z.coerce
+    //   .number<number>({
+    //     error: (issue) =>
+    //       issue.input === undefined ? "Price is required" : "Invalid number",
+    //   })
+    //   .min(100, "Price must be at least $1.00"),
+    price: z
+      .transform(Number)
+      .pipe(z.number().min(100, "Price must be at least $1.00")),
     type: z.string({
       error: (issue) =>
         issue.input === undefined ? "Type is required" : "Invalid input.",
