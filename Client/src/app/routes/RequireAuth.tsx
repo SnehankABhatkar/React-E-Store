@@ -11,6 +11,15 @@ function RequireAuth() {
     return <Navigate to="/login" state={{ from: loaction }} />;
   }
 
+  const adminRoutes = ["/inventory", "/adminDashboard"];
+
+  if (
+    adminRoutes.includes(loaction.pathname) &&
+    !user.roles.includes("Admin")
+  ) {
+    return <Navigate to={"/"} replace />;
+  }
+
   return <Outlet />;
 }
 

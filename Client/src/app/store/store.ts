@@ -11,6 +11,7 @@ import { catalogSlice } from "../../features/catalog/catalogSlice";
 import { accountApi } from "../../features/account/accountApi";
 import { checkoutApi } from "../../features/checkout/checkoutApi";
 import { ordersApi } from "../../features/orders/ordersApi";
+import { adminApi } from "../../features/admin/adminApi";
 
 export function configureTheStore() {
   return legacy_createStore(counterReducer);
@@ -24,6 +25,8 @@ export const store = configureStore({
     [accountApi.reducerPath]: accountApi.reducer,
     [checkoutApi.reducerPath]: checkoutApi.reducer,
     [ordersApi.reducerPath]: ordersApi.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
+
     counter: counterSlice.reducer,
     ui: uiSlice.reducer,
     catalog: catalogSlice.reducer,
@@ -36,6 +39,7 @@ export const store = configureStore({
       accountApi.middleware,
       checkoutApi.middleware,
       ordersApi.middleware,
+      adminApi.middleware,
     ),
 });
 
