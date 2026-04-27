@@ -47,7 +47,8 @@ export default function ProductForm({
     if (product) reset(product);
 
     return () => {
-      if (watchFile) URL.revokeObjectURL(watchFile.preview);
+      if (watchFile && watchFile.preview)
+        URL.revokeObjectURL(watchFile.preview);
     };
   }, [product, reset, watchFile]);
 

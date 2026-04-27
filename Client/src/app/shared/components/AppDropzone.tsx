@@ -28,7 +28,10 @@ export default function AppDropzone<T extends FieldValues>(props: Props<T>) {
     [field],
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "image/jpeg": [".jpeg", ".jpg"] },
+  });
 
   const dzStyles = {
     display: "flex",
@@ -52,8 +55,10 @@ export default function AppDropzone<T extends FieldValues>(props: Props<T>) {
         error={!!fieldState.error}
       >
         <input {...getInputProps()} />
-        <UploadFile sx={{ fontSize: "100px" }} />
-        <Typography variant="h4">Drop image here</Typography>
+        <UploadFile sx={{ fontSize: "75px" }} />
+        <Typography variant="h6" textAlign={"center"}>
+          Drop images here or click to browse. Only .jpeg files supported.
+        </Typography>
         <FormHelperText>{fieldState.error?.message}</FormHelperText>
       </FormControl>
     </div>
