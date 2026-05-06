@@ -17,6 +17,7 @@ function AppPagination({ metadata, onPageChange }: Props) {
       display={"flex"}
       justifyContent={"space-between"}
       alignItems={"center"}
+      marginTop={1}
     >
       <Typography>
         Displaying {startItem}-{endItem} of {totalCount} items

@@ -17,6 +17,7 @@ public class OrdersController(StoreContext context) : BaseApiController
     public async Task<ActionResult<List<OrderDto>>> GetOrders()
     {
         var orders = await context.Orders
+        .AsNoTracking()
         .ProjectToDto()
         .Where(x => x.BuyerEmail == User.GetUsername())
         .ToListAsync();

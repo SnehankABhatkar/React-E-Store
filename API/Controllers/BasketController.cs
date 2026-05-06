@@ -14,7 +14,9 @@ public class BasketController(StoreContext context
     [HttpGet]
     public async Task<ActionResult<BasketDto>> GetBasket()
     {
-        var basket = await context.Baskets.GetBasketWithItems(Request.Cookies["basketId"]);
+        var basket = await context.Baskets
+        .AsNoTracking()
+        .GetBasketWithItems(Request.Cookies["basketId"]);
 
         if (basket == null) return NoContent();
 

@@ -13,6 +13,7 @@ public class ProductsController(StoreContext context) : BaseApiController
     public async Task<ActionResult<List<Product>>> GetProducts([FromQuery] ProductsParams productsParams)
     {
         var query = context.Products
+            .AsNoTracking()
             .Sort(productsParams.OrderBy)
             .Search(productsParams.SearchTerm)
             .Filter(productsParams.Brands, productsParams.Types)
